@@ -1,0 +1,28 @@
+# Emulator Stuff
+*.sgm
+*.sav
+
+# Roms
+*.gba
+
+# Assembler binaries
+*.bin
+*.out
+
+# IDE
+.project
+.pydevproject
+
+# Hacking
+*.cfg
+*.exe
+*.bak
+*.ini
+
+# Archives
+*.zip
+*.7z
+*.rar
+*.tar.gz
+*.tar
+
