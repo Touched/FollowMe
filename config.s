@@ -4,7 +4,6 @@
 @ The behaviour number for the follow me, same as in Advance Map
 .equ FOLLOW_BEHAVIOUR, 0x35 
 
-
 @ Config. Todo
 .equ GAMECODE_BPRE, 0
 .equ GAMECODE_BPEE, 1
@@ -22,4 +21,9 @@
 .equ WALKRUN_STATE, 0x02037078
 .equ STATE_RUNNING, 0x80
 .equ STATE_SLIDING, 0x40
-.equ LAST_MOVED_LOCATION, 0x020370BE
+.equ LAST_MOVED_DIRECTION, 0x02036E35 @ Free RAM
+.equ FOLLOW_MESSAGE, 0x02036E36
+.equ MESSAGE_NONE, 0
+.equ MESSAGE_HOP, 1
+.equ MESSAGE_PREHOP, 2
+.equ MESSAGE_POSTHOP, 3

@@ -48,10 +48,10 @@ with open('test.gba', 'rb+') as rom:
         rom.seek(item)
         rom.write((0x2102).to_bytes(2, 'little'))
         
-    hook('moveecho.s', 'test.gba', 0x800000, 0x0629F6, 2)
-    hook('hopecho.s', 'test.gba', 0x810000, 0x062DE4, 2)
+    hook('movement.s', 'test.gba', 0x800000, 0x0629F6, 2)
+    #hook('hopecho.s', 'test.gba', 0x810000, 0x062DE4, 2)
+    hook('ledge.s', 'test.gba', 0x810000, 0x062E32, 2)
     hook('collision.s', 'test.gba', 0x820000, 0x062A10, 3)
     hook('ghost.s', 'test.gba', 0x830000, 0x06395C, 3)
-    
     hook('facing.s', 'test.gba', 0x840000, 0x062990, 2)
-    
+    hook('test.s', 'test.gba', 0x850000, 0x062A44, 2)

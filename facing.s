@@ -13,7 +13,7 @@
 @ Directions: 0: Down, 1: Up, 2: Left, 3: right
 
 main:
-    ldr r0, =(0x02036E35)
+    ldr r0, =(LAST_MOVED_DIRECTION)
     ldrb r0, [r0]
     
     @ Account for the apply movement oddities (delay movements, etc)
@@ -31,6 +31,8 @@ to_dir:
     
     @ Arrange parameters for function call after exit
     mov r2, r0
+    
+resume:
     mov r0, r4
     mov r1, r5
     

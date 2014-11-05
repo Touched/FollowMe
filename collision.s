@@ -71,10 +71,11 @@ collision:
     cmp r0, #0
     bne collision_return
     
+    @ Store the player's direction iff we have moved
     ldrb r2, [r4, #0x18] @ Direction byte
     lsl r2, #0x1C @ Get the actual direction
     lsr r2, #0x1C
-    ldr r1, =(LAST_MOVED_LOCATION) @ TODO change this
+    ldr r1, =(LAST_MOVED_DIRECTION) 
     sub r2, #1
     strb r2, [r1]
    
