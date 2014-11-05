@@ -18,6 +18,7 @@
 
 @ FR
 .equ NPC_STATES, 0x02036E38
+.equ FOLLOWER_STORE, 0x0203E000 @ Probably not free must change
 
 .equ WALKRUN_STATE, 0x02037078
 .equ STATE_RUNNING, 0x80

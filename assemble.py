@@ -4,25 +4,30 @@ import os
 import subprocess
 import sys
 import shutil
+import binascii
 
-OBJCOPY = 'arm-linux-gnueabi-objcopy'
-AS = 'arm-linux-gnueabi-as'
-CC = 'arm-linux-gnueabi-gcc-4.7'
-CXX = 'arm-linux-gnueabi-g++'
+OBJCOPY = 'arm-none-eabi-objcopy'
+AS = 'arm-none-eabi-as'
+CC = 'arm-none-eabi-gcc'
+CXX = 'arm-none-eabi-g++'
 
-def assemble(assembly, rom, offset, *args):
+def assemble(assembly, rom, offset, clear=True, *args):
 	subprocess.check_output([AS, '-mthumb'] + list(args) + [assembly])
 	subprocess.check_output([OBJCOPY, '-O', 'binary', 'a.out', 'a.bin'])
 	os.remove('a.out') 
 	with open(rom, 'rb+') as out, open('a.bin', 'rb') as ins:
 		out.seek(offset)
-		out.write(ins.read())
-		out.write(bytes(100))
+		data = ins.read()
+		
+		if clear:
+		    out.write(bytes(100))
+		        
+		out.write(data)
 		
 shutil.copyfile('BPRE0.gba', 'test.gba')
 
 def hook(file, rom, space, hook_at, register=0, *args):
-    assemble(file, rom, space, *args)
+    assemble(file, rom, space, True, *args)
     with open('test.gba', 'rb+') as rom:
         # Align 2
         if hook_at & 1:
@@ -49,11 +54,12 @@ with open('test.gba', 'rb+') as rom:
         rom.write((0x2102).to_bytes(2, 'little'))
         
     hook('movement.s', 'test.gba', 0x800000, 0x0629F6, 2)
-    #hook('hopecho.s', 'test.gba', 0x810000, 0x062DE4, 2)
     hook('ledge.s', 'test.gba', 0x810000, 0x062E32, 2)
     hook('collision.s', 'test.gba', 0x820000, 0x062A10, 3)
     hook('ghost.s', 'test.gba', 0x830000, 0x06395C, 3)
     hook('facing.s', 'test.gba', 0x840000, 0x062990, 2)
     hook('test.s', 'test.gba', 0x850000, 0x062A44, 2)
-    
     hook('localid.s', 'test.gba', 0x860000, 0x05E00E, 0)
+    
+    #assemble('ledgejumpmovement.asm', 'test.gba', 0x05C23C, False)
+    

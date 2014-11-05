@@ -22,7 +22,7 @@ main:
     ldrb r1, [r3]
     cmp r1, #MESSAGE_NONE
     bne handle_message
-  
+    
 continue_checking:  
     @ Lets determine the movement type
     @ Note that these might be accurate. I will be doing more testing later
@@ -45,32 +45,21 @@ continue_checking:
     
 handle_message:
     cmp r1, #MESSAGE_HOP
-    beq message_hop
-    
-    cmp r1, #MESSAGE_POSTHOP
     beq message_post_hop
     @ We cannot handle this message, so pretend we never jumped to the message
     @ handler
     b continue_checking
     
-message_hop:
-    mov r1, #MESSAGE_POSTHOP
-    strb r1, [r3]
-
-    mov r1, #0x4
-    add r2, r1
-    b resume
-    
 message_post_hop:
     mov r1, #MESSAGE_NONE
     strb r1, [r3]
 
-    mov r1, #0x29
+    mov r1, #0x7C
     add r2, r1
     b resume
     
 state_running:
-    mov r3, #0xD @#0xD (0x1D - 0x10)
+    mov r3, #0x7C @#0xD (0x1D - 0x10)
     add r2, r3
     b resume
 
@@ -88,4 +77,8 @@ resume:
 .align 2
 store: .word 0x02036E35
 return: .word 0x08062A00 + 1
+
+memcpy:
+    ldr r3, =(0x081E5E78 + 1)
+    bx r3
 

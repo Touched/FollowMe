@@ -48,7 +48,7 @@ collision:
     @ whether the player is moving or not
        
     ldrb r0, [r0, #3] @ This byte is 1 only if the player is actually moving
-    mov r1, #1
+    mov r1, #1 @ Invert the result
     eor r0, r1
     cmp r0, #0
     bne collision_return

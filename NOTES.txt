@@ -1,0 +1,1 @@
+0805F710 npc_coords_set
