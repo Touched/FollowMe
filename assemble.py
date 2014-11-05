@@ -55,3 +55,5 @@ with open('test.gba', 'rb+') as rom:
     hook('ghost.s', 'test.gba', 0x830000, 0x06395C, 3)
     hook('facing.s', 'test.gba', 0x840000, 0x062990, 2)
     hook('test.s', 'test.gba', 0x850000, 0x062A44, 2)
+    
+    hook('localid.s', 'test.gba', 0x860000, 0x05E00E, 0)
