@@ -28,8 +28,9 @@ main:
     @ Check for the sprite behaviour
     mov r0, #FOLLOW_BEHAVIOUR
     cmp r1, r0
-    beq return_pass
+    beq check_collider_is_player
     
+return_blocked:
     mov r0, #1
     b return
     
@@ -37,7 +38,24 @@ do_loop:
     ldr r0, exit
     bx r0
     
-return_pass:
+check_collider_is_player:
+    ldr r1, npc_states
+    sub r0, r6, r1 @ Subtract npc_states from the collider npc_state
+    
+    @ Assuming we were passed a valid NPC state, this will give us the index
+    @ It's hacky, but that's what all of this is ;)
+    lsr r0, #5 @ Integer division by 20
+    sub r0, #1 
+    
+    @ Get the NPC ID of the player
+    ldr r1, =WALKRUN_STATE
+    ldrb r1, [r1, #5] 
+    
+    @ Only allow passage if the player is the one that is colliding
+    cmp r0, r1
+    beq return_blocked
+    
+return_clear:
     mov r0, #0
     
 return:

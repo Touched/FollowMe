@@ -34,43 +34,26 @@ collision:
     mov r5, r4
     ldr r4, npc_states @ Player NPC State
     
-    ldr r0, walkrun_state
+    ldr r0, =WALKRUN_STATE
     ldrb r1, [r0, #5]
-    lsl r0, r1, #3 @ * 0x24
-    add r0, r1
-    lsl r0, #2
-    add r4, r0
-        
-    @ Store target X and Y pos on stack
-    sub sp, #8
-    mov r1, sp
-    add r2, r1, #2
-    ldrh r0, [r4, #0x14] 
-    strh r0, [r1]
-    ldrh r0, [r4, #0x16] 
-    strh r0, [r2]
-    
-    ldrb r0, [r4, #0x18] @ Direction byte
-    lsl r0, #0x1C @ Get the actual direction
-    lsr r0, #0x1C
-    bl move_coords_direction
-    
-    @ Get block role
-    mov r3, sp
-    ldrh r1, [r3] @ X
-    ldrh r2, [r3, #2] @ Y
-    
-    ldrb r0, [r4, #0xB]
-    
-    @bl get_behaviour_byte_at
-    bl height_check
-    
+    lsl r2, r1, #3 @ * 0x24
+    add r2, r1
+    lsl r2, #2
+    add r4, r2
+   
+    @ Rather than trying to replicate the collision detection algorithm, I
+    @ opted instead to check if the player is moving, and only then to store
+    @ the last moved position. This results in PERFECT colision detection, and
+    @ There is a conveniently placed byte in the walkrun state that tells us 
+    @ whether the player is moving or not
+       
+    ldrb r0, [r0, #3] @ This byte is 1 only if the player is actually moving
     mov r1, #1
     eor r0, r1
-    
     cmp r0, #0
     bne collision_return
     
+store_pos:  
     @ Store the player's direction iff we have moved
     ldrb r2, [r4, #0x18] @ Direction byte
     lsl r2, #0x1C @ Get the actual direction
@@ -80,16 +63,20 @@ collision:
     strb r2, [r1]
    
 collision_return:
-    add sp, #8
+    @add sp, #8
     pop {r4-r5, pc}
     
 height_check:
     ldr r3, =(0x080681B0 + 1)
     bx r3
     
+cur_mapdata_get_middle2bit_at:
+    ldr r3, =(0x08058DC4 + 1)
+    bx r3
+    
 collision_func:
     @ Player collision
-    ldr r4, =(0x080636AC + 1)
+    ldr r4, =(0x0805BB1C + 1)
     bx r4
     
 player_get_pos_to:
