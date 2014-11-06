@@ -44,19 +44,27 @@ continue_checking:
     b resume
     
 handle_message:
+    @ Only handle the message if we're moving
+    ldr r0, =WALKRUN_STATE
+    ldrb r0, [r0, #3] 
+    cmp r0, #0
+    beq continue_checking
+    
     cmp r1, #MESSAGE_HOP
-    beq message_post_hop
+    beq message_hop
+    
     @ We cannot handle this message, so pretend we never jumped to the message
     @ handler
     b continue_checking
     
-message_post_hop:
+message_hop:
     mov r1, #MESSAGE_NONE
     strb r1, [r3]
 
-    mov r1, #0x7C
+    mov r1, #0x74
     add r2, r1
     b resume
+    
     
 state_running:
     mov r3, #0x7C @#0xD (0x1D - 0x10)

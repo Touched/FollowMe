@@ -19,10 +19,10 @@ def assemble(assembly, rom, offset, clear=True, *args):
 		out.seek(offset)
 		data = ins.read()
 		
+		out.write(data)
 		if clear:
 		    out.write(bytes(100))
 		        
-		out.write(data)
 		
 shutil.copyfile('BPRE0.gba', 'test.gba')
 
@@ -60,6 +60,8 @@ with open('test.gba', 'rb+') as rom:
     hook('facing.s', 'test.gba', 0x840000, 0x062990, 2)
     hook('test.s', 'test.gba', 0x850000, 0x062A44, 2)
     hook('localid.s', 'test.gba', 0x860000, 0x05E00E, 0)
+    
+    hook('warp.s', 'test.gba', 0x870000, 0x0570EC, 0)
     
     #assemble('ledgejumpmovement.asm', 'test.gba', 0x05C23C, False)
     
