@@ -53,6 +53,11 @@ with open('test.gba', 'rb+') as rom:
         rom.seek(item)
         rom.write((0x2102).to_bytes(2, 'little'))
         
+    # daniilS's FatKid patch
+    rom.seek(0x3B4DA0)
+    rom.write((0x060009000335).to_bytes(6, 'big'))
+        
+    # Hooks
     hook('movement.s', 'test.gba', 0x800000, 0x0629F6, 2)
     hook('ledge.s', 'test.gba', 0x810000, 0x062E32, 2)
     hook('collision.s', 'test.gba', 0x820000, 0x062A10, 3)
